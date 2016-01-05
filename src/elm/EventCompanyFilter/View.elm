@@ -23,7 +23,7 @@ companyListForSelect : Signal.Address Action -> List Company.Model -> Model -> H
 companyListForSelect address companies eventCompanyFilter  =
   let
     selectedText =
-      case eventCompanyFilter of
+      case eventCompanyFilter.val of
         Just id -> toString id
         Nothing -> ""
 
@@ -45,7 +45,7 @@ companyListForSelect address companies eventCompanyFilter  =
 
     -- The selected company ID.
     selectedId =
-      case eventCompanyFilter of
+      case eventCompanyFilter.val of
         Just id ->
           id
         Nothing ->
@@ -53,9 +53,15 @@ companyListForSelect address companies eventCompanyFilter  =
 
     getOption company =
       option [value <| toString company.id, selected (company.id == selectedId)] [ text company.label]
+
+    counterModel = 0
   in
-    select
-      [ value selectedText
-      , on "change" targetValue (\str -> Signal.message address <| EventCompanyFilter.Update.SelectCompany <| textToMaybe str)
+    div
+      []
+      [ select
+          [ value selectedText
+          , on "change" targetValue (\str -> Signal.message address <| EventCompanyFilter.Update.SelectCompany <| textToMaybe str)
+          ]
+          (List.map getOption companies')
+        , text (" " ++ (toString eventCompanyFilter.counter))
       ]
-      (List.map getOption companies')
