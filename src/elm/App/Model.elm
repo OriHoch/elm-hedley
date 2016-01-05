@@ -10,6 +10,7 @@ import Pages.Event.Model as Event exposing (initialModel, Model)
 import Pages.GithubAuth.Model as GithubAuth exposing (Model)
 import Pages.Login.Model as Login exposing (initialModel, Model)
 import Pages.User.Model as User exposing (initialModel, Model)
+import Pages.PageNotFound.Model as PageNotFound exposing (initialModel, Model)
 
 type alias AccessToken = String
 type alias CompanyId = Int
@@ -35,6 +36,7 @@ type alias Model =
   -- If the user is anonymous, we want to know where to redirect them.
   , nextPage : Maybe Page
   , user : User.Model
+  , pagenotfound : PageNotFound.Model
   }
 
 initialModel : Model
@@ -50,4 +52,5 @@ initialModel =
   , login = Login.initialModel
   , nextPage = Nothing
   , user = User.initialModel
+  , pagenotfound = PageNotFound.initialModel
   }

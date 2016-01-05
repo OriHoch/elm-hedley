@@ -81,7 +81,11 @@ mainContent address model =
         div [ style myStyle ] [ Pages.Login.View.view context childAddress model.login ]
 
     App.PageNotFound ->
-      div [] [ Pages.PageNotFound.View.view ]
+      let
+        childAddress =
+          Signal.forwardTo address App.Update.ChildPageNotFoundAction
+      in
+        div [] [ Pages.PageNotFound.View.view childAddress model.pagenotfound ]
 
 
     App.User ->

@@ -19,6 +19,7 @@ import Pages.GithubAuth.Update exposing (Action)
 import Pages.Login.Update exposing (Action)
 import Pages.User.Model exposing (User)
 import Pages.User.Update exposing (Action)
+import Pages.PageNotFound.Update exposing (Action, init)
 
 type alias AccessToken = String
 type alias Model = App.Model
@@ -27,6 +28,7 @@ initialEffects : List (Effects Action)
 initialEffects =
   [ Effects.map ChildConfigAction <| snd Config.Update.init
   , Effects.map ChildLoginAction <| snd Pages.Login.Update.init
+  , Effects.map ChildPageNotFoundAction <| snd Pages.PageNotFound.Update.init
   ]
 
 init : (Model, Effects Action)
@@ -41,6 +43,7 @@ type Action
   | ChildEventAction Pages.Event.Update.Action
   | ChildGithubAuthAction Pages.GithubAuth.Update.Action
   | ChildLoginAction Pages.Login.Update.Action
+  | ChildPageNotFoundAction Pages.PageNotFound.Update.Action
   | ChildUserAction Pages.User.Update.Action
   | Logout
   | SetAccessToken AccessToken
@@ -177,6 +180,16 @@ update action model =
         , Effects.batch effects'
         )
 
+    ChildPageNotFoundAction act ->
+      let
+        (childModel, childEffects) = Pages.PageNotFound.Update.update act model.pagenotfound
+
+        defaultEffect =
+          Effects.map ChildPageNotFoundAction childEffects
+      in
+        ( {model | pagenotfound = childModel }
+        , Effects.map ChildPageNotFoundAction childEffects
+        )
 
     ChildUserAction act ->
       let
