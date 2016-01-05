@@ -53,8 +53,6 @@ companyListForSelect address companies eventCompanyFilter  =
 
     getOption company =
       option [value <| toString company.id, selected (company.id == selectedId)] [ text company.label]
-
-    counterModel = 0
   in
     div
       []
